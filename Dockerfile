@@ -25,10 +25,8 @@ RUN pip3 install --no-cache-dir --requirement /conf/requirements.txt
 
 RUN cd /tmp \
   && git clone --depth 1 https://github.com/digitalearthafrica/deafrica-sandbox-notebooks.git \
-  && cd deafrica-sandbox-notebooks \
-  pip install Tools \
-  rm -R Tools .git .github .gitignore DEAfrica_notebooks_template.ipynb README.md \
-  mkdir /notebooks && cp -r . /notebooks
+  && pip install deafrica-sandbox-notebooks/Tools \
+  && rm -rf /tmp/deafrica-sandbox-notebooks
 
 WORKDIR /notebooks
 

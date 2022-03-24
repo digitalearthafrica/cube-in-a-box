@@ -77,12 +77,15 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash -ex
           export DEBIAN_FRONTEND=noninteractive
-          apt-get update && apt-get install -y wget unzip
-          wget https://github.com/digitalearthafrica/cube-in-a-box/archive/refs/heads/main.zip -O /home/ubuntu/archive.zip
-          unzip /home/ubuntu/archive.zip -d /home/ubuntu
-          bash /home/ubuntu/cube-in-a-box-main/setup.sh
-          echo 'CIABPASSWORD=${SecretPassword}' > /home/ubuntu/cube-in-a-box-main/.env
-          make -C /home/ubuntu/cube-in-a-box-main setup-prod BBOX="${ExtentToIndex}"
+          apt-get update && apt-get install -y wget unzip git
+          cd /home/ubuntu
+          git clone https://github.com/digitalearthafrica/cube-in-a-box.git
+          cd cube-in-a-box
+          git submodule init
+          git submodule update
+          bash /home/ubuntu/cube-in-a-box/setup.sh
+          echo 'CIABPASSWORD=${SecretPassword}' > /home/ubuntu/cube-in-a-box/.env
+          make -C /home/ubuntu/cube-in-a-box setup-prod BBOX="${ExtentToIndex}"
       Tags:
         - Key: "Name"
           Value: !Ref "EC2InstanceName"
