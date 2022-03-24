@@ -11,7 +11,7 @@ on:
   pull_request:
     paths:
       - "Dockerfile"
-      - "Requirements.txt"
+      - "requirements.txt"
 
 jobs:
   docker:
