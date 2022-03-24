@@ -8,9 +8,12 @@ on:
     paths:
       - "**"
 
-  release:
-    types:
-      - created
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "Dockerfile"
+      - "Requirements.txt"
 
 jobs:
   docker:
@@ -24,15 +27,17 @@ jobs:
           fetch-depth: 0
 
       - name: Build and Push latest Docker image tag
-        uses: whoan/docker-build-with-cache-action@v4
+        uses: whoan/docker-build-with-cache-action@v5
         with:
           image_name: digitalearthafrica/cube-in-a-box
           image_tag: latest
           username: gadockersvc
           password: ${{ secrets.GADOCKERSVC_PASSWORD }}
+          push_image_and_stages: on:push
 
       - name: Copy a folder to s3
         uses: prewk/s3-cp-action@v2
+        if: ${{ github.event_name == 'push' }}
         with:
           aws_access_key_id: ${{ secrets.GA_AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.GA_AWS_SECRET_ACCESS_KEY }}
