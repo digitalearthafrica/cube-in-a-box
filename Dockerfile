@@ -1,4 +1,4 @@
-FROM osgeo/gdal:ubuntu-small-3.3.1
+FROM osgeo/gdal:ubuntu-full-3.4.2
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
@@ -22,6 +22,13 @@ RUN apt-get update && \
 
 COPY requirements.txt /conf/
 RUN pip3 install --no-cache-dir --requirement /conf/requirements.txt
+
+RUN cd /tmp \
+  && git clone --depth 1 https://github.com/digitalearthafrica/deafrica-sandbox-notebooks.git \
+  && cd deafrica-sandbox-notebooks \
+  pip install Tools \
+  rm -R Tools .git .github .gitignore DEAfrica_notebooks_template.ipynb README.md \
+  mkdir /notebooks && cp -r . /notebooks
 
 WORKDIR /notebooks
 
